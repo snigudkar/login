@@ -14,7 +14,7 @@ import { initializeApp } from "firebase/app";
 import "./App.css";
 
 
-//INSERT API DETAILS HERE
+// INSERT API DETAILS HERE
 //
 //
 
@@ -28,11 +28,11 @@ const App = () => {
       <Routes>
         <Route path="/" element={<LoginOptions />} />
         <Route path="/user-login" element={<UserLogin />} />
-        <Route path="/admin-login" element={<AdminLogin />} />
+        
         <Route path="/user-signup" element={<UserSignup />} />
-        <Route path="/admin-signup" element={<AdminSignup />} />
+        
         <Route path="/user-dashboard" element={<UserDashboard />} />
-        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        
       </Routes>
     </Router>
   );
@@ -44,8 +44,8 @@ const LoginOptions = () => {
     <div className="container">
       <h1>Welcome to Sahayog</h1>
       <div className="home-links">
-        <Link className="btn" to="/user-login">Sign In as User</Link>
-        <Link className="btn" to="/admin-login">Sign In as Admin</Link>
+        <Link className="btn" to="/user-login">Sign In </Link>
+        
       </div>
     </div>
   );
@@ -93,45 +93,6 @@ const UserLogin = () => {
 };
 
 
-const AdminLogin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
-
-  const handleAdminLogin = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      navigate("/admin-dashboard");
-    } catch (error) {
-      console.error("Admin login error:", error);
-      alert(`Admin login failed: ${error.message}`);
-    }
-  };
-
-  return (
-    <div className="container form-container">
-      <h2>Admin Login</h2>
-      <input
-        className="input-field"
-        type="email"
-        placeholder="Admin Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        className="input-field"
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button className="btn" onClick={handleAdminLogin}>Login</button>
-      <div className="link-container">
-        <Link className="link" to="/admin-signup">Don't have an account? Sign Up</Link>
-      </div>
-    </div>
-  );
-};
 
 
 const UserSignup = () => {
@@ -185,57 +146,7 @@ const UserSignup = () => {
 };
 
 
-const AdminSignup = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
 
-  const handleAdminSignup = async () => {
-    if (password !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
-    }
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      
-      await setDoc(doc(db, "users", userCredential.user.uid), { role: "admin" });
-      
-      navigate("/admin-dashboard");
-    } catch (error) {
-      console.error("Admin signup error:", error);
-      alert(`Admin signup failed: ${error.message}`);
-    }
-  };
-
-  return (
-    <div className="container form-container">
-      <h2>Admin Sign Up</h2>
-      <input
-        className="input-field"
-        type="email"
-        placeholder="Admin Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        className="input-field"
-        type="password"
-        placeholder="Password (min 6 characters)"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <input
-        className="input-field"
-        type="password"
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
-      />
-      <button className="btn" onClick={handleAdminSignup}>Sign Up</button>
-    </div>
-  );
-};
 
 
 const UserDashboard = () => {
@@ -256,21 +167,6 @@ const UserDashboard = () => {
 };
 
 
-const AdminDashboard = () => {
-  const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await signOut(auth);
-    navigate("/");
-  };
-
-  return (
-    <div className="dashboard-container">
-      <h1 className="welcome-admin">Welcome, Admin!</h1>
-      <p className="decorative-text">You have access to admin features.</p>
-      <button className="btn logout-btn" onClick={handleLogout}>Logout</button>
-    </div>
-  );
-};
 
 export default App;
